@@ -1,0 +1,824 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="YuMan-LJP">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="某天看到有个自动化测试的软件，想着借助这个开发一个自动挂机刷手游日常的程序，实验了一下，发现确实可行，但是挂机过程中，不能操作电脑，程序本身执行会代替发出鼠标点击和键盘键入事件。然后了解一下相关技术，发现这一块大部分是用C++和python实现的多，这也是他们本身的一些优势，然后我就继续找了找.NET是否能实现，后来渐渐的知道了ADB，OCR，OpenCV等技术。ADB是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt;AutoPaly&gt; 0-分析设计">
+<meta property="og:url" content="http://example.com/2024/10/13/AutoPaly-0-Summary/index.html">
+<meta property="og:site_name" content="YuMan-LJP&#39;s Blog">
+<meta property="og:description" content="某天看到有个自动化测试的软件，想着借助这个开发一个自动挂机刷手游日常的程序，实验了一下，发现确实可行，但是挂机过程中，不能操作电脑，程序本身执行会代替发出鼠标点击和键盘键入事件。然后了解一下相关技术，发现这一块大部分是用C++和python实现的多，这也是他们本身的一些优势，然后我就继续找了找.NET是否能实现，后来渐渐的知道了ADB，OCR，OpenCV等技术。ADB是">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-10-13T12:54:14.000Z">
+<meta property="article:modified_time" content="2024-10-16T23:58:20.777Z">
+<meta property="article:author" content="YuMan-LJP">
+<meta property="article:tag" content=".NET">
+<meta property="article:tag" content="自动化测试">
+<meta property="article:tag" content="NetAutoGUI">
+<meta property="article:tag" content="AdvancedSharpAdbClient">
+<meta property="article:tag" content="PaddleOCRJson.NET">
+<meta property="article:tag" content="OpenCvSharp4">
+<meta property="article:tag" content="Quartz">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>&lt;AutoPaly&gt; 0-分析设计 - YuMan-LJP&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>YuMan-LJP&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="&lt;AutoPaly&gt; 0-分析设计"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-13 20:54" pubdate>
+          2024年10月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">&lt;AutoPaly&gt; 0-分析设计</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年10月17日 早上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-info">
+            <p>某天看到有个自动化测试的软件，想着借助这个开发一个自动挂机刷手游日常的程序，实验了一下，发现确实可行，但是挂机过程中，不能操作电脑，程序本身执行会代替发出鼠标点击和键盘键入事件。然后了解一下相关技术，发现这一块大部分是用C++和python实现的多，这也是他们本身的一些优势，然后我就继续找了找.NET是否能实现，后来渐渐的知道了ADB，OCR，OpenCV等技术。ADB是可以实现使用命令控制安卓设备或模拟器，实现屏幕点击和截图等功能，OCR就是文字识别，OpenCV就是图像识别。<br>核心就是利用ADB截图，利用OCR和OpenCV识别定位要点击的坐标位置，使用ADB实现一次屏幕点击。</p>
+          </div>
+
+<h2 id="1-启发和尝试"><a href="#1-启发和尝试" class="headerlink" title="1.启发和尝试"></a>1.启发和尝试</h2><p>最早是在网上发现一些自动化测试的类库，可以实现定位屏幕指定图片的坐标，并实现点击。了解到的类库是这个【SuperPatrick】，提供了一些方法，可以实现传一个截图，可以在屏幕上识别并实现点击，从此就开始构想一套挂机程序。但是在实践过程中遇到一些阻碍，差点就放弃了。<br>具体的困难是，一些手游的电脑版，这个类库是没办法识别出游戏的窗体的，导致没办法实现，然后发现使用安卓模拟器可以正常识别，所以改用这个游戏的手机版本进行试验，然后找到一个封装更便利的桌面自动化类库【NetAutoGUI】，并且用这个写出一个勉强可以跑的挂机程序。<br>实现的效果勉强能使用，但是缺陷很大，就是这个类库本质是模拟发出电脑鼠标点击事件和键盘输入事件，在程序执行时，自己不能操作电脑，否则就会干扰，此时我也想过搞一个定时任务，然后设置在晚上11点自动启动模拟器，自动打开登录游戏，自动挂机，完成后自动关机，如果电脑支持设置电脑自动开机的话，那整个流程确实是完全自动化的。但还有一个很大的问题，就是完全靠截图的识别，有的时候成功率不高，识别不出来，一定要截图的分辨率，图片的背景颜色等，要完全一样才能识别，稍微差别一点点就没法识别成功，这个是硬伤。</p>
+<p>（电脑设置任务自动启动：Win+R 输入 shell:startup 回车后打开启动文件夹，将快捷方式放进来即可）</p>
+<h2 id="2-深入了解"><a href="#2-深入了解" class="headerlink" title="2.深入了解"></a>2.深入了解</h2><p>后来在网上找了相关的技术资料学习，发现了ADB，全称是Android Debug Bridge（安卓调试桥），连接 Android 与 PC 的桥梁，可以在电脑上使用命令控制安卓设备或模拟器，然后发现提供了操作安卓端很多的非常有效的命令，诸如：启动app、指定坐标实现点击、屏幕截图，刚刚好符合挂机所需要的命令，剩下的就是识别坐标，网上普遍的技术，一个就是文字识别，一个就是图像识别。文字识别我用下来识别率很高，除了一些特殊符号，基本都正常识别到，图像识别的成功率受分辨率的影响很大，后面我会持续学习关注一下有哪些跟高效的识别方法。简单写了一个程序跑了一下，可以成功实现，相比最早期的桌面自动化，这种可以不受当前用户操作影响，可以边执行挂机，边做其他事，并且引入文字识别，成功率高了一大截。</p>
+<h2 id="3-技术类库"><a href="#3-技术类库" class="headerlink" title="3.技术类库"></a>3.技术类库</h2><h3 id="3-1-桌面自动化类库"><a href="#3-1-桌面自动化类库" class="headerlink" title="3.1.桌面自动化类库"></a>3.1.桌面自动化类库</h3><p>【NetAutoGUI】类库，在window上，可以实现应用程序操作，鼠标操作，键盘操作，自带识别图片在桌面的位置，不过这里主要使用他的启动应用程序的功能，和操作设置应用程序窗体最大化等功能，其他功能就不用了</p>
+<h3 id="3-2-ADB操作类库"><a href="#3-2-ADB操作类库" class="headerlink" title="3.2.ADB操作类库"></a>3.2.ADB操作类库</h3><p>【AdvancedSharpAdbClient】类库，该类库包含了基本的操作ADB的功能，ADB本身还是需要我们自己额外去下载的</p>
+<h3 id="3-3-文字识别类库"><a href="#3-3-文字识别类库" class="headerlink" title="3.3.文字识别类库"></a>3.3.文字识别类库</h3><p>【PaddleOCRJson.NET】类库，可以离线调用【PaddleOCR-json】，提供了.Net的相关实现</p>
+<h3 id="3-4-图像识别类库"><a href="#3-4-图像识别类库" class="headerlink" title="3.4.图像识别类库"></a>3.4.图像识别类库</h3><p>【OpenCvSharp4】类库，OpenCV是一款常用的图像处理库，但是官方支持C++和Python。OpenCvSharp是一款使得OpenCV支持C#开发的一个库。</p>
+<h3 id="3-5-定时任务类库"><a href="#3-5-定时任务类库" class="headerlink" title="3.5.定时任务类库"></a>3.5.定时任务类库</h3><p>【Quartz.NET】框架，Quartz是一个强大的开源作业调度框架，来源于Java，而Quartz.NET提供了.NET版本下的实现</p>
+<h3 id="3-6-日志类库"><a href="#3-6-日志类库" class="headerlink" title="3.6.日志类库"></a>3.6.日志类库</h3><p>【log4net】类库</p>
+<h3 id="3-7-后续待引入"><a href="#3-7-后续待引入" class="headerlink" title="3.7.后续待引入"></a>3.7.后续待引入</h3><p>后续可能会弄一个邮件通知功能，引入邮件通知相关的技术框架</p>
+<h2 id="4-开发设计"><a href="#4-开发设计" class="headerlink" title="4.开发设计"></a>4.开发设计</h2><h3 id="4-1-功能设计"><a href="#4-1-功能设计" class="headerlink" title="4.1.功能设计"></a>4.1.功能设计</h3><p>设计之初，是打算开发一个可动态配置命令的挂机程序，不针对具体游戏，只要是安卓平台能运行的游戏都可以。<br>提供以下功能：<br>（1）可以随时配置定时任务，创建定时多个定时任务，设置定时任务启动时间，每个定时任务执行各自的挂机命令<br>（2）可以随时配置挂机命令，提供一个组别，每个组可以配置多条命令，每个命令可以包含多个子命令。例如：建立了一个游戏A刷日常刷金币的组别，这组包含的命令：首先识别登录游戏，识别关卡，识别开始作战，循环作战，直到“体力”用完为止。<br>（3）以上配置的信息以json的形式，存储到该程序本地，该程序以客户端的形式开发，但是由于本人对window端仅仅winform会用一点，但是不熟，一直是web端开发人员，所以打算套壳的方式，套一个web端作为前端。winform使用WebView2作为网页访问控件</p>
+<h3 id="4-2-详细设计"><a href="#4-2-详细设计" class="headerlink" title="4.2.详细设计"></a>4.2.详细设计</h3><h4 id="4-2-1-客户端设计"><a href="#4-2-1-客户端设计" class="headerlink" title="4.2.1.客户端设计"></a>4.2.1.客户端设计</h4><p>有两种方案，一种是使用WebView2的自带的前后端通讯模式，不过官方只支持字符串和json的格式通讯，全局出入口只有这一个地方；另一种方法就是引入web端类库，搭建一套web端的完整请求流程<br>第一种方案安全，但是接口一多就比较麻烦，全部要自己手工分配，第二种方案符合web端开发习惯，前后端甚至可以分离开发，接口编写容易，但是会暂用本地一个端口，可能会暴露接口。</p>
+<h4 id="4-2-2-json的存取"><a href="#4-2-2-json的存取" class="headerlink" title="4.2.2.json的存取"></a>4.2.2.json的存取</h4><p>json对象设计：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>属性名</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>字符串</td>
+<td>Id</td>
+<td>【唯一Id】可以用GUID，对应定时任务</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>Name</td>
+<td>【命名】用户自定义</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>Remark</td>
+<td>【备注】</td>
+</tr>
+<tr>
+<td>对象集合</td>
+<td>Commands</td>
+<td>【命令脚本】</td>
+</tr>
+</tbody></table>
+<p>Command对象</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>属性名</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>可空数字</td>
+<td>ParentIndex</td>
+<td>上一级序号，有子集合的时候使用</td>
+</tr>
+<tr>
+<td>数字</td>
+<td>Index</td>
+<td>【序号】命令必须按序号从小到大依次执行</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>Name</td>
+<td>【命名】用户自定义</td>
+</tr>
+<tr>
+<td>枚举类</td>
+<td>Type</td>
+<td>【类型】图片地址的方式或文字识别的方式，Text&#x2F;Image，默认Text</td>
+</tr>
+<tr>
+<td>数字</td>
+<td>Interval</td>
+<td>【时间间隔】单位秒，如果含有子命令就是循环的间隔，如果没有子命令就是每次识别的间隔，默认3</td>
+</tr>
+<tr>
+<td>数字</td>
+<td>Timeout</td>
+<td>【超时时间】单位秒，如果这个命令到超时了直接结束并提示，默认10</td>
+</tr>
+<tr>
+<td>枚举类</td>
+<td>Operate</td>
+<td>【操作指令】WaitToClick&#x2F;Sleep&#x2F;Loop_Break&#x2F;Loop_Continue，默认WaitToClick</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>Content</td>
+<td>【内容】图片相对地址、需要识别的文字内容、休眠等待的时间</td>
+</tr>
+<tr>
+<td>数字</td>
+<td>Count</td>
+<td>【执行次数】至少1次，至多不限，该条命令执行指定次数，默认1</td>
+</tr>
+<tr>
+<td>布尔</td>
+<td>IsThrowExceptionIfNoFind</td>
+<td>【是否抛出异常如果找不到内容时】不抛异常表示当前命令内容找不到就超时后就跳过了，不会中途结束，默认true</td>
+</tr>
+<tr>
+<td>数字</td>
+<td>GetIndex</td>
+<td>【取值序号】文字识别，如果存在多个时，标记取哪个，顺序从左上到右下，默认0</td>
+</tr>
+<tr>
+<td>对象集合</td>
+<td>Points</td>
+<td>坐标历史记录</td>
+</tr>
+<tr>
+<td>对象集合</td>
+<td>Commands</td>
+<td>【命令脚本】可能这一个命令下面包含多个子命令，需要按【特殊指令】进行循环执行</td>
+</tr>
+</tbody></table>
+<p>操作指令：<br>aitToClick等待直到能识别点击到为止，执行一次点击<br>Sleep休眠等待【内容】按毫秒为单位<br>Loop_Break重复循环执行子命令集合，直到有【内容】出现就跳出循环<br>Loop_Continue满足【内容】出现，一直重复循环执行子命令集合，直到【内容】不出现</p>
+<h4 id="4-2-3-定时任务设计"><a href="#4-2-3-定时任务设计" class="headerlink" title="4.2.3.定时任务设计"></a>4.2.3.定时任务设计</h4><h4 id="4-2-4-前后端分离"><a href="#4-2-4-前后端分离" class="headerlink" title="4.2.4.前后端分离"></a>4.2.4.前后端分离</h4><h4 id="4-2-5-执行命令的详细流程"><a href="#4-2-5-执行命令的详细流程" class="headerlink" title="4.2.5.执行命令的详细流程"></a>4.2.5.执行命令的详细流程</h4><h3 id="4-3-页面设计"><a href="#4-3-页面设计" class="headerlink" title="4.3.页面设计"></a>4.3.页面设计</h3><h3 id="4-4-优化空间以及后续功能展望"><a href="#4-4-优化空间以及后续功能展望" class="headerlink" title="4.4.优化空间以及后续功能展望"></a>4.4.优化空间以及后续功能展望</h3><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p>SuperPatrick技术文档 <a target="_blank" rel="noopener" href="http://www.autotestops.com/index/xq/cid/28/id/41.html">http://www.autotestops.com/index/xq/cid/28/id/41.html</a><br>AdvancedSharpAdbClient <a target="_blank" rel="noopener" href="https://github.com/SharpAdb/AdvancedSharpAdbClient">https://github.com/SharpAdb/AdvancedSharpAdbClient</a><br>PaddleOCR-json <a target="_blank" rel="noopener" href="https://github.com/hiroi-sora/PaddleOCR-json">https://github.com/hiroi-sora/PaddleOCR-json</a><br>opencvsharp <a target="_blank" rel="noopener" href="https://github.com/shimat/opencvsharp">https://github.com/shimat/opencvsharp</a><br>NetAutoGUI <a target="_blank" rel="noopener" href="https://github.com/yangzhongke/NetAutoGUI">https://github.com/yangzhongke/NetAutoGUI</a><br>WebView2功能和API概述 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/microsoft-edge/webview2/concepts/overview-features-apis?tabs=dotnetcsharp">https://learn.microsoft.com/zh-cn/microsoft-edge/webview2/concepts/overview-features-apis?tabs=dotnetcsharp</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A0%94%E7%A9%B6%E5%AD%A6%E4%B9%A0/" class="category-chain-item">研究学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/NET/" class="print-no-link">#.NET</a>
+      
+        <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" class="print-no-link">#自动化测试</a>
+      
+        <a href="/tags/NetAutoGUI/" class="print-no-link">#NetAutoGUI</a>
+      
+        <a href="/tags/AdvancedSharpAdbClient/" class="print-no-link">#AdvancedSharpAdbClient</a>
+      
+        <a href="/tags/PaddleOCRJson-NET/" class="print-no-link">#PaddleOCRJson.NET</a>
+      
+        <a href="/tags/OpenCvSharp4/" class="print-no-link">#OpenCvSharp4</a>
+      
+        <a href="/tags/Quartz/" class="print-no-link">#Quartz</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>&lt;AutoPaly&gt; 0-分析设计</div>
+      <div>http://example.com/2024/10/13/AutoPaly-0-Summary/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>YuMan-LJP</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/20/SummaryPropertyEqualityComparer/" title="《2》经验总结-属性相等比较">
+                        <span class="hidden-mobile">《2》经验总结-属性相等比较</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

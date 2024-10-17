@@ -53,6 +53,8 @@
 <meta name="twitter:image" content="http://example.com/img/StudyAspNetIdentity/img1_1_1(1).jpg">
   
   
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
   
   <title>【2】学习ASP.NET Identity，搭建一套简易权限控制系统 - YuMan-LJP&#39;s Blog</title>
 
@@ -261,6 +263,14 @@
 
     
     
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
   </div>
 
 
@@ -292,6 +302,14 @@
         <div id="board">
           <article class="post-content mx-auto">
             <h1 id="seo-header">【2】学习ASP.NET Identity，搭建一套简易权限控制系统</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年1月2日 早上
+                  
+                
+              </p>
             
             
               <div class="markdown-body">
@@ -465,9 +483,9 @@
 
 <h3 id="2-2-6-启动测试"><a href="#2-2-6-启动测试" class="headerlink" title="2.2.6.启动测试"></a>2.2.6.启动测试</h3><p>不同角色的用户只能访问指定自身角色的方法：</p>
 <ul>
-<li><a href="mailto:&#49;&#x31;&#49;&#x40;&#49;&#x31;&#49;&#x2e;&#x71;&#113;">&#49;&#x31;&#49;&#x40;&#49;&#x31;&#49;&#x2e;&#x71;&#113;</a>用户可以访问 <strong>TestNormalUserRole</strong> 方法；</li>
-<li><a href="mailto:&#50;&#50;&#50;&#64;&#50;&#x32;&#x32;&#x2e;&#x71;&#113;">&#50;&#50;&#50;&#64;&#50;&#x32;&#x32;&#x2e;&#x71;&#113;</a>用户可以访问 <strong>TestAdminRole</strong> 、 <strong>TestMoreAdminRole</strong> 和 <strong>TestMoreAdminRoleV2</strong> 方法；</li>
-<li><a href="mailto:&#51;&#x33;&#x33;&#64;&#51;&#51;&#51;&#x2e;&#x71;&#113;">&#51;&#x33;&#x33;&#64;&#51;&#51;&#51;&#x2e;&#x71;&#113;</a>用户可以访问 <strong>TestSuperAdminRole</strong> 、 <strong>TestMoreAdminRole</strong> 和 <strong>TestMoreAdminRoleV2</strong> 方法。</li>
+<li><a href="mailto:&#x31;&#x31;&#x31;&#x40;&#x31;&#x31;&#x31;&#x2e;&#x71;&#x71;">&#x31;&#x31;&#x31;&#x40;&#x31;&#x31;&#x31;&#x2e;&#x71;&#x71;</a>用户可以访问 <strong>TestNormalUserRole</strong> 方法；</li>
+<li><a href="mailto:&#50;&#50;&#x32;&#64;&#50;&#x32;&#x32;&#x2e;&#x71;&#113;">&#50;&#50;&#x32;&#64;&#50;&#x32;&#x32;&#x2e;&#x71;&#113;</a>用户可以访问 <strong>TestAdminRole</strong> 、 <strong>TestMoreAdminRole</strong> 和 <strong>TestMoreAdminRoleV2</strong> 方法；</li>
+<li><a href="mailto:&#x33;&#x33;&#x33;&#x40;&#x33;&#x33;&#51;&#46;&#113;&#113;">&#x33;&#x33;&#x33;&#x40;&#x33;&#x33;&#51;&#46;&#113;&#113;</a>用户可以访问 <strong>TestSuperAdminRole</strong> 、 <strong>TestMoreAdminRole</strong> 和 <strong>TestMoreAdminRoleV2</strong> 方法。</li>
 </ul>
 <p>访问成功如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_2_6(1).jpg" srcset="/img/loading.gif" lazyload alt="角色授权访问成功" title="角色授权访问成功"></p>
 <p>访问失败如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_2_6(2).jpg" srcset="/img/loading.gif" lazyload alt="角色授权访问失败" title="角色授权访问失败"></p>
@@ -522,9 +540,9 @@
 
 <p>目前实现了不同用户可以访问指定权限的方法，</p>
 <ul>
-<li><a href="mailto:&#x31;&#x31;&#49;&#64;&#x31;&#x31;&#x31;&#46;&#113;&#x71;">&#x31;&#x31;&#49;&#64;&#x31;&#x31;&#x31;&#46;&#113;&#x71;</a>用户可以访问 <strong>TestCreate</strong> 、 <strong>TestUpdate</strong> 、 <strong>TestDelete</strong> 方法；</li>
-<li><a href="mailto:&#x32;&#x32;&#50;&#x40;&#50;&#x32;&#x32;&#x2e;&#113;&#x71;">&#x32;&#x32;&#50;&#x40;&#50;&#x32;&#x32;&#x2e;&#113;&#x71;</a>用户可以访问 <strong>TestApprove</strong> 、 <strong>TestReject</strong> 方法；</li>
-<li><a href="mailto:&#x33;&#x33;&#x33;&#64;&#51;&#51;&#51;&#x2e;&#x71;&#113;">&#x33;&#x33;&#x33;&#64;&#51;&#51;&#51;&#x2e;&#x71;&#113;</a>用户可以访问全部方法。</li>
+<li><a href="mailto:&#49;&#49;&#49;&#x40;&#x31;&#49;&#x31;&#46;&#x71;&#113;">&#49;&#49;&#49;&#x40;&#x31;&#49;&#x31;&#46;&#x71;&#113;</a>用户可以访问 <strong>TestCreate</strong> 、 <strong>TestUpdate</strong> 、 <strong>TestDelete</strong> 方法；</li>
+<li><a href="mailto:&#50;&#x32;&#x32;&#64;&#50;&#x32;&#x32;&#x2e;&#x71;&#x71;">&#50;&#x32;&#x32;&#64;&#50;&#x32;&#x32;&#x2e;&#x71;&#x71;</a>用户可以访问 <strong>TestApprove</strong> 、 <strong>TestReject</strong> 方法；</li>
+<li><a href="mailto:&#x33;&#51;&#51;&#64;&#51;&#51;&#x33;&#46;&#x71;&#113;">&#x33;&#51;&#51;&#64;&#51;&#51;&#x33;&#46;&#x71;&#113;</a>用户可以访问全部方法。</li>
 </ul>
 <p>在三个权限校验类打个断点，会发现，每次访问方法时，三个权限校验类都会执行一遍，只要其中一个类执行到 <code>context.Succeed</code> 即表示可以访问</p>
 <div class="note note-warning">
@@ -719,9 +737,9 @@
 
 <p>完成以上三部启动项目即可查看到效果，三个账户都登录一次，验证一下是否只有对应权限才会显示对应的标签</p>
 <ul>
-<li>作为普通用户角色的<a href="mailto:&#x31;&#x31;&#49;&#64;&#x31;&#49;&#49;&#x2e;&#x71;&#113;">&#x31;&#x31;&#49;&#64;&#x31;&#49;&#49;&#x2e;&#x71;&#113;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(1).jpg" srcset="/img/loading.gif" lazyload alt="普通用户视图" title="普通用户视图"></li>
-<li>作为管理员角色的<a href="mailto:&#50;&#50;&#50;&#x40;&#50;&#50;&#x32;&#x2e;&#x71;&#x71;">&#50;&#50;&#50;&#x40;&#50;&#50;&#x32;&#x2e;&#x71;&#x71;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(2).jpg" srcset="/img/loading.gif" lazyload alt="管理员视图" title="管理员视图"></li>
-<li>作为超级管理员角色的<a href="mailto:&#51;&#51;&#51;&#64;&#51;&#x33;&#x33;&#46;&#x71;&#113;">&#51;&#51;&#51;&#64;&#51;&#x33;&#x33;&#46;&#x71;&#113;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(3).jpg" srcset="/img/loading.gif" lazyload alt="超级管理员视图" title="超级管理员视图"></li>
+<li>作为普通用户角色的<a href="mailto:&#x31;&#x31;&#49;&#64;&#x31;&#x31;&#x31;&#46;&#x71;&#x71;">&#x31;&#x31;&#49;&#64;&#x31;&#x31;&#x31;&#46;&#x71;&#x71;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(1).jpg" srcset="/img/loading.gif" lazyload alt="普通用户视图" title="普通用户视图"></li>
+<li>作为管理员角色的<a href="mailto:&#x32;&#x32;&#x32;&#64;&#50;&#50;&#50;&#46;&#x71;&#x71;">&#x32;&#x32;&#x32;&#64;&#50;&#50;&#50;&#46;&#x71;&#x71;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(2).jpg" srcset="/img/loading.gif" lazyload alt="管理员视图" title="管理员视图"></li>
+<li>作为超级管理员角色的<a href="mailto:&#x33;&#51;&#x33;&#x40;&#x33;&#x33;&#51;&#x2e;&#x71;&#113;">&#x33;&#51;&#x33;&#x40;&#x33;&#x33;&#51;&#x2e;&#x71;&#113;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(3).jpg" srcset="/img/loading.gif" lazyload alt="超级管理员视图" title="超级管理员视图"></li>
 </ul>
 <h3 id="2-6-4-代码优化"><a href="#2-6-4-代码优化" class="headerlink" title="2.6.4.代码优化"></a>2.6.4.代码优化</h3><p>在视图中调用的方法可见，其实和 <a href="#section2_3_2">2.3.2</a> 中控制器方法调用的校验完全一样，都是通过调用IAuthorizationService接口的AuthorizeAsync方法，触发MyViewAuthorizationHandler授权校验类的代码来进行控制。但是这样视图的写法过于复杂，而且会发现MyViewAuthorizationHandler类的写法和MyAuthorizationHandler的写法基本差不多，所以在此基础上可以再进一步封装，具体改造如下：</p>
 <h4 id="2-6-4-1-优化第一步"><a href="#2-6-4-1-优化第一步" class="headerlink" title="2.6.4.1.优化第一步"></a>2.6.4.1.优化第一步</h4><p>重构MyAuthorizationHandler、MyViewAuthorizationHandler和PermissionManager三个类，相同的逻辑封装一个方法，具体代码调整如下：</p>
@@ -1055,9 +1073,33 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
     </div>
   
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
   
   
   
@@ -1204,6 +1246,8 @@
   <script>Fluid.plugins.imageCaption();</script>
 
   <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 
