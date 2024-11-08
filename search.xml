@@ -273,8 +273,12 @@
   <entry>
     <title>&lt;AutoPaly&gt; 2-后端搭建</title>
     <url>/2024/10/18/AutoPaly-2-BackEndBuild/</url>
-    <content><![CDATA[<div class="note note-info">
-            <p>万事开头难，只有主体框架搭建好， 剩下的页面数据维护都是常规的开发操作，还有最核心的命令脚本执行的流程也是比较核心的逻辑，这个也搭建好了那整体上基本没什么问题。<br>以下展示一些比较重要的代码，其他增删改查之类的，不是很重要的就不再展示了，可以直接下载样例程序代码查看。如果经历过网页端程序开发应该都很容易看懂的。<br>–根据前两篇中所提及的设计和技术，进行后端搭建，给前端提供数据维护接口，提供脚本操作接口等等。</p>
+    <content><![CDATA[<div class="note note-success">
+            <p>根据前两篇中所提及的设计和技术，进行后端搭建，给前端提供数据维护接口，提供脚本操作接口等等。</p>
+          </div>
+
+<div class="note note-info">
+            <p>万事开头难，只有主体框架搭建好， 剩下的页面数据维护都是常规的开发操作，还有最核心的命令脚本执行的流程也是比较核心的逻辑，这个也搭建好了那整体上基本没什么问题。<br>以下展示一些比较重要的代码，其他增删改查之类的，不是很重要的就不再展示了，可以直接下载样例程序代码查看。如果经历过网页端程序开发应该都很容易看懂的。</p>
           </div>
 
 
@@ -388,12 +392,112 @@
   <entry>
     <title>&lt;AutoPaly&gt; 3-前端搭建</title>
     <url>/2024/10/18/AutoPaly-3-FrontEndBuild/</url>
-    <content><![CDATA[<div class="note note-info">
-            <p>根据前两篇中所提及的设计和技术，进行前端搭建，仍在努力建构中。。。</p>
+    <content><![CDATA[<div class="note note-success">
+            <p>根据前两篇中所提及的设计和技术，进行前端搭建，主要提供数据维护操作。</p>
+          </div>
+
+<div class="note note-info">
+            <p>前端主要用Vue2 + BootstrapVue 来实现。本人对bootstrap框架的样式和使用比较熟悉，然后刚刚好利用这次机会熟悉一下前端开发。</p>
           </div>
 
 
-<h2 id="1-框架搭建"><a href="#1-框架搭建" class="headerlink" title="1.框架搭建"></a>1.框架搭建</h2><h2 id="2-前端页面开发"><a href="#2-前端页面开发" class="headerlink" title="2.前端页面开发"></a>2.前端页面开发</h2><h2 id="3-定时任务配置页面开发"><a href="#3-定时任务配置页面开发" class="headerlink" title="3.定时任务配置页面开发"></a>3.定时任务配置页面开发</h2><h2 id="4-命令组配置页面开发"><a href="#4-命令组配置页面开发" class="headerlink" title="4.命令组配置页面开发"></a>4.命令组配置页面开发</h2>]]></content>
+<h2 id="1-框架搭建"><a href="#1-框架搭建" class="headerlink" title="1.框架搭建"></a>1.框架搭建</h2><h3 id="1-1-创建vue2项目"><a href="#1-1-创建vue2项目" class="headerlink" title="1.1.创建vue2项目"></a>1.1.创建vue2项目</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm install -g @vue/cli<br>vue create 【你的项目名称】（如果创建不了，打开powershell，执行set-executionpolicy remotesigned）<br></code></pre></td></tr></table></figure>
+
+<div class="note note-info">
+            <p>右键 Git Bash Here执行rm -rf .git 可以清除原项目的git版本信息</p>
+          </div>
+
+<h3 id="1-2-安装axios"><a href="#1-2-安装axios" class="headerlink" title="1.2.安装axios"></a>1.2.安装axios</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm install axios --save<br></code></pre></td></tr></table></figure>
+
+<p>项目引入，可以设置为全局引用：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;axios&#x27;</span><br><span class="hljs-comment">// 将 axios 绑定到 Vue 原型上，方便全局使用</span><br><span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$axios</span> = axios;<br><span class="hljs-comment">// 配置 axios 默认的根路径</span><br>axios.<span class="hljs-property">defaults</span>.<span class="hljs-property">baseURL</span> = <span class="hljs-string">&#x27;http://localhost:5000&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-3-安装bootstrap-vue"><a href="#1-3-安装bootstrap-vue" class="headerlink" title="1.3.安装bootstrap-vue"></a>1.3.安装bootstrap-vue</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm install vue bootstrap-vue bootstrap<br></code></pre></td></tr></table></figure>
+
+<p>项目引入：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">BootstrapVue</span>, <span class="hljs-title class_">IconsPlugin</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;bootstrap-vue&#x27;</span><br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;../src/styles/custom.scss&#x27;</span><span class="hljs-comment">//或者在vue.config.js里面引入</span><br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap/dist/css/bootstrap.css&#x27;</span><br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;bootstrap-vue/dist/bootstrap-vue.css&#x27;</span><br><br><span class="hljs-comment">// Install BootstrapVue</span><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">BootstrapVue</span>)<br><span class="hljs-comment">// Optionally install the BootstrapVue icon components plugin</span><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">IconsPlugin</span>)<br></code></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;配置sass</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm install node-sass --save<br>npm install sass-loader --save<br>npm install scss-loader --save<br></code></pre></td></tr></table></figure>
+
+<p>增加一个scss文件，公共引入，路径：&#x2F;src&#x2F;styles&#x2F;custom.scss</p>
+<figure class="highlight scss"><table><tr><td class="code"><pre><code class="hljs scss"><span class="hljs-comment">// Define variable defaults</span><br><span class="hljs-variable">$body-bg</span>: <span class="hljs-number">#000</span>;<br><span class="hljs-variable">$body-color</span>: <span class="hljs-number">#111</span>;<br><br><span class="hljs-comment">// Then import Bootstrap and BootstrapVue SCSS files (order is important)</span><br><span class="hljs-keyword">@import</span> <span class="hljs-string">&#x27;node_modules/bootstrap/scss/bootstrap.scss&#x27;</span>;<br><span class="hljs-keyword">@import</span> <span class="hljs-string">&#x27;node_modules/bootstrap-vue/src/index.scss&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>以上安装好之后，有两种方式引入：<br>（1）方法1：main.js里面引入</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;../src/styles/custom.scss&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>（2）方法2：vue.config.js里面引入</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-attr">css</span>: &#123;<br>    <span class="hljs-attr">loaderOptions</span>: &#123;<br>      <span class="hljs-attr">sass</span>: &#123;<br>        <span class="hljs-attr">additionalData</span>: <span class="hljs-string">`@import &quot;@/styles/custom.scss&quot;;`</span><br>      &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+<p>&#x2F;&#x2F;cass-locader的版本不同，additionalData也会不同，<br>&#x2F;&#x2F;sass-loader:v10以上就用：additionalData<br>&#x2F;&#x2F;sass-loader:v8以上就用：prependData<br>&#x2F;&#x2F;sass-loader:v8-以下就用：data</p>
+<div class="note note-info">
+            <p>官网配置方法：<a href="https://code.z01.com/bootstrap-vue/docs/">https://code.z01.com/bootstrap-vue/docs/</a><br>特别注意bootstrap不能安装5版本以上的，npm install <a href="mailto:&#x62;&#x6f;&#x6f;&#x74;&#x73;&#x74;&#114;&#97;&#112;&#64;&#52;&#x2e;&#53;&#x2e;&#51;">&#x62;&#x6f;&#x6f;&#x74;&#x73;&#x74;&#114;&#97;&#112;&#64;&#52;&#x2e;&#53;&#x2e;&#51;</a></p>
+          </div>
+
+<h3 id="1-4-安装路由组件"><a href="#1-4-安装路由组件" class="headerlink" title="1.4.安装路由组件"></a>1.4.安装路由组件</h3><p>引入vue-router</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm install vue-router@3.5.1<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">VueRouter</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;vue-router&quot;</span>;<br><span class="hljs-keyword">import</span> router <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./router&#x27;</span><span class="hljs-comment">//引入路由器，自己建一个router文件夹，下面可以建一个index.js，里面存放路径规则</span><br><br><span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>(&#123;<br>  <span class="hljs-attr">render</span>: <span class="hljs-function"><span class="hljs-params">h</span> =&gt;</span> <span class="hljs-title function_">h</span>(<span class="hljs-title class_">App</span>),<br>  <span class="hljs-attr">router</span>: router <span class="hljs-comment">//这里绑定</span><br>&#125;).$mount(<span class="hljs-string">&#x27;#app&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+<div class="note note-info">
+            <p>学习这篇：<a href="https://www.jianshu.com/p/514c7588e877">https://www.jianshu.com/p/514c7588e877</a></p>
+          </div>
+
+<h2 id="1-5-安装多语言组件"><a href="#1-5-安装多语言组件" class="headerlink" title="1.5.安装多语言组件"></a>1.5.安装多语言组件</h2><p>引入vue-i18n</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm install vue-i18n@8 --save<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">VueI18</span>n <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue-i18n&#x27;</span><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">VueI18</span>n);<br><span class="hljs-keyword">const</span> i18n = <span class="hljs-keyword">new</span> <span class="hljs-title class_">VueI18</span>n(&#123;<br>  <span class="hljs-attr">locale</span>: <span class="hljs-variable language_">localStorage</span>.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;lang&#x27;</span>) || <span class="hljs-string">&#x27;zh&#x27;</span>,<br>  <span class="hljs-attr">messages</span>: &#123;<br>      <span class="hljs-string">&#x27;zh&#x27;</span>: <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./i18n/zh&#x27;</span>),<br>      <span class="hljs-string">&#x27;en&#x27;</span>: <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./i18n/en&#x27;</span>)<br>  &#125;<br>&#125;)<br><span class="hljs-keyword">new</span> <span class="hljs-title class_">Vue</span>(&#123;<br>  <span class="hljs-attr">render</span>: <span class="hljs-function"><span class="hljs-params">h</span> =&gt;</span> <span class="hljs-title function_">h</span>(<span class="hljs-title class_">App</span>),<br>  <span class="hljs-attr">router</span>: router,<br>  <span class="hljs-attr">i18n</span>: i18n,<span class="hljs-comment">//这里配置</span><br>&#125;).$mount(<span class="hljs-string">&#x27;#app&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<div class="note note-info">
+            <p>学习这篇：<a href="https://blog.csdn.net/weixin_51220466/article/details/123889240">https://blog.csdn.net/weixin_51220466/article/details/123889240</a></p>
+          </div>
+
+<h2 id="1-6-安装Sweet"><a href="#1-6-安装Sweet" class="headerlink" title="1.6.安装Sweet"></a>1.6.安装Sweet</h2><p>安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm i vue-swal<br></code></pre></td></tr></table></figure>
+<p>引入：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">VueSwal</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue-swal&#x27;</span>;<br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">VueSwal</span>)<br><br><span class="hljs-comment">//使用样例：</span><br><span class="hljs-variable language_">this</span>.$swal(<span class="hljs-string">&quot;标题&quot;</span>, <span class="hljs-string">&quot;内容&quot;</span>,<span class="hljs-string">&quot;success&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-7-安装toastr"><a href="#1-7-安装toastr" class="headerlink" title="1.7.安装toastr"></a>1.7.安装toastr</h2><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm install @deveodk/vue-toastr --save<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">VueToastr</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@deveodk/vue-toastr&#x27;</span>;<br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css&#x27;</span>;<br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">VueToastr</span>);<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-8-安装blockUI"><a href="#1-8-安装blockUI" class="headerlink" title="1.8.安装blockUI"></a>1.8.安装blockUI</h2><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">npm install --save vue-blockui<br></code></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">BlockUI</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue-blockui&#x27;</span><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">BlockUI</span>)<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="2-组件封装"><a href="#2-组件封装" class="headerlink" title="2.组件封装"></a>2.组件封装</h2><h3 id="2-1-封装loading效果"><a href="#2-1-封装loading效果" class="headerlink" title="2.1.封装loading效果"></a>2.1.封装loading效果</h3><p>loading.js代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">LoadingComponent</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./Loading.vue&#x27;</span>;<br><br><span class="hljs-keyword">const</span> <span class="hljs-title class_">Loading</span> = &#123;&#125;<br><br><span class="hljs-comment">// Vue暴露了一个install方法，用于自定义插件</span><br><span class="hljs-title class_">Loading</span>.<span class="hljs-property">install</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">Vue</span>) &#123;<br>    <span class="hljs-comment">// 创建一个子类</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-title class_">LoadingConstructor</span> = <span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">extend</span>(<span class="hljs-title class_">LoadingComponent</span>);<br>    <span class="hljs-comment">// 实例化这个子类</span><br>    <span class="hljs-keyword">const</span> instance = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LoadingConstructor</span>();<br>    <span class="hljs-comment">// 创建一个div元素，并把实例挂载到div元素上</span><br>    instance.$mount(<span class="hljs-variable language_">document</span>.<span class="hljs-title function_">createElement</span>(<span class="hljs-string">&#x27;div&#x27;</span>));<br>    <span class="hljs-comment">// 将el插入到body元素中</span><br>    <span class="hljs-variable language_">document</span>.<span class="hljs-property">body</span>.<span class="hljs-title function_">appendChild</span>(instance.<span class="hljs-property">$el</span>);<br><br>    <span class="hljs-comment">// 添加实例方法</span><br>    <span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$setBusy</span> = <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> &#123;<br>        <span class="hljs-keyword">if</span> (msg) &#123;<br>            instance.<span class="hljs-property">msg</span> = msg;<br>        &#125;<br>        instance.<span class="hljs-property">isShow</span> = <span class="hljs-literal">true</span>;<br>    &#125;;<br>    <span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$clearBusy</span> = <span class="hljs-function">() =&gt;</span> &#123;<br>        instance.<span class="hljs-property">isShow</span> = <span class="hljs-literal">false</span>;<br>    &#125;;<br>&#125;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Loading</span>;<br></code></pre></td></tr></table></figure>
+
+<p>Loading.vue代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs vue">&lt;template&gt;<br>    &lt;div&gt;<br>        &lt;!-- <br>            loading锁定页面效果组件，有三种写法：<br>            &lt;BlockUI message=&quot;显示文字&quot; url=&quot;图片地址&quot;&gt;&lt;/BlockUI&gt;<br>            &lt;BlockUI message=&quot;显示文字&quot; html=&quot;&lt;i class=&#x27;fa fa-cog fa-spin fa-3x fa-fw&#x27;&gt;&lt;/i&gt;&quot;&gt;&lt;/BlockUI&gt;<br>            &lt;BlockUI message=&quot;显示文字&quot;&gt;<br>                &lt;i class=&quot;fa fa-cog fa-spin fa-3x fa-fw&quot;&gt;&lt;/i&gt;<br>            &lt;/BlockUI&gt; <br>        --&gt;<br>        &lt;BlockUI :message=&quot;msg&quot; v-if=&quot;isShow&quot;&gt;<br>            &lt;b-spinner label=&quot;Loading...&quot;&gt;&lt;/b-spinner&gt;<br>        &lt;/BlockUI&gt;<br>    &lt;/div&gt;<br>&lt;/template&gt;<br><br>&lt;script&gt;<br>export default &#123;<br>    name: &#x27;Loading&#x27;,<br>    props: &#123;<br>        // 提示信息<br>        msg: &#123;<br>            type: String,<br>            default: &#x27;正在处理中，请稍等...&#x27;<br>        &#125;,<br>        // 是否显示提示框<br>        isShow: &#123;<br>            type: Boolean,<br>            default: false<br>        &#125;,<br>    &#125;,<br>    data() &#123;<br>        return &#123;<br>        &#125;<br>    &#125;,<br>    methods: &#123;<br>    &#125;<br>&#125;<br>&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>引入</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> loading <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Common/loading&#x27;</span><br><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(loading);<br></code></pre></td></tr></table></figure>
+
+<p>使用样例：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-variable language_">this</span>.$setBusy();<br><span class="hljs-comment">//请求后端API...</span><br><br><span class="hljs-comment">//回调方法中清除loading</span><br><span class="hljs-variable language_">this</span>.$clearBusy();<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-弹窗组件"><a href="#2-2-弹窗组件" class="headerlink" title="2.2.弹窗组件"></a>2.2.弹窗组件</h3><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> <span class="hljs-title class_">VueSwal</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;vue-swal&#x27;</span>;<br><br><span class="hljs-keyword">const</span> <span class="hljs-title class_">Message</span> = &#123;&#125;<br><br><span class="hljs-comment">// Vue暴露了一个install方法，用于自定义插件</span><br><span class="hljs-title class_">Message</span>.<span class="hljs-property">install</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">Vue</span>) &#123;<br>    <span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(<span class="hljs-title class_">VueSwal</span>);<br><br>    <span class="hljs-comment">//https://sweetalert.js.org/docs/</span><br>    <span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$messageInfo</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">title, message</span>) &#123;<br>        <span class="hljs-title class_">Vue</span>.$swal(title, message, <span class="hljs-string">&quot;info&quot;</span>)<br>    &#125;<br>    <span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$messageSuccess</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">title, message</span>) &#123;<br>        <span class="hljs-title class_">Vue</span>.$swal(title, message, <span class="hljs-string">&quot;success&quot;</span>)<br>    &#125;<br>    <span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$messageWarn</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">title, message</span>) &#123;<br>        <span class="hljs-title class_">Vue</span>.$swal(title, message, <span class="hljs-string">&quot;warning&quot;</span>)<br>    &#125;<br>    <span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$messageError</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">title, message</span>) &#123;<br>        <span class="hljs-title class_">Vue</span>.$swal(title, message, <span class="hljs-string">&quot;error&quot;</span>)<br>    &#125;<br>    <span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$messageConfirm</span> = <span class="hljs-keyword">function</span> (<span class="hljs-params">title, message, callback</span>) &#123;<br>        <span class="hljs-title class_">Vue</span>.$swal(&#123;<br>            <span class="hljs-attr">title</span>: title,<br>            <span class="hljs-attr">text</span>: message,<br>            <span class="hljs-attr">icon</span>: <span class="hljs-string">&#x27;info&#x27;</span>,<br>            <span class="hljs-attr">buttons</span>: &#123;<br>                <span class="hljs-attr">cancel</span>: &#123;<br>                    <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;Cancel&quot;</span>,<br>                    <span class="hljs-attr">value</span>: <span class="hljs-literal">null</span>,<br>                    <span class="hljs-attr">visible</span>: <span class="hljs-literal">true</span>,<br>                    <span class="hljs-attr">className</span>: <span class="hljs-string">&quot;&quot;</span>,<br>                    <span class="hljs-attr">closeModal</span>: <span class="hljs-literal">true</span>,<br>                &#125;,<br>                <span class="hljs-attr">confirm</span>: &#123;<br>                    <span class="hljs-attr">text</span>: <span class="hljs-string">&quot;OK&quot;</span>,<br>                    <span class="hljs-attr">value</span>: <span class="hljs-literal">true</span>,<br>                    <span class="hljs-attr">visible</span>: <span class="hljs-literal">true</span>,<br>                    <span class="hljs-attr">className</span>: <span class="hljs-string">&quot;&quot;</span>,<br>                    <span class="hljs-attr">closeModal</span>: <span class="hljs-literal">true</span><br>                &#125;<br>            &#125;<br>        &#125;).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">isConfirm</span>) =&gt;</span> &#123;<br>            <span class="hljs-title function_">callback</span>(isConfirm)<br>        &#125;)<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-title class_">Message</span>;<br></code></pre></td></tr></table></figure>
+
+<p>引入</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> message <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./components/Common/message&#x27;</span><br><br><span class="hljs-title class_">Vue</span>.<span class="hljs-title function_">use</span>(message);<br></code></pre></td></tr></table></figure>
+
+<p>使用样例：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-variable language_">this</span>.$messageConfirm(<span class="hljs-string">&quot;系统提示&quot;</span>, <span class="hljs-string">&quot;确定点击吗？&quot;</span>, <span class="hljs-function">(<span class="hljs-params">isConfirm</span>) =&gt;</span> &#123;<br>    <span class="hljs-keyword">if</span> (isConfirm) &#123;<br>        <span class="hljs-comment">//TODO...</span><br>    &#125;<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-引入公共方法"><a href="#2-3-引入公共方法" class="headerlink" title="2.3.引入公共方法"></a>2.3.引入公共方法</h3><figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-comment">//获取一个GUID</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">getGuid</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">function</span> <span class="hljs-title function_">S4</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">return</span> (((<span class="hljs-number">1</span> + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()) * <span class="hljs-number">0x10000</span>) | <span class="hljs-number">0</span>).<span class="hljs-title function_">toString</span>(<span class="hljs-number">16</span>).<span class="hljs-title function_">substring</span>(<span class="hljs-number">1</span>);<br>    &#125;<br>    <span class="hljs-keyword">return</span> (<span class="hljs-title function_">S4</span>() + <span class="hljs-title function_">S4</span>() + <span class="hljs-string">&quot;-&quot;</span> + <span class="hljs-title function_">S4</span>() + <span class="hljs-string">&quot;-&quot;</span> + <span class="hljs-title function_">S4</span>() + <span class="hljs-string">&quot;-&quot;</span> + <span class="hljs-title function_">S4</span>() + <span class="hljs-string">&quot;-&quot;</span> + <span class="hljs-title function_">S4</span>() + <span class="hljs-title function_">S4</span>() + <span class="hljs-title function_">S4</span>());<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">getObjectURL</span>(<span class="hljs-params">file</span>) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> (file) === <span class="hljs-string">&quot;string&quot;</span>) &#123;<br>        <span class="hljs-keyword">if</span> (file &amp;&amp; file.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;data:image&#x27;</span>) !== -<span class="hljs-number">1</span>) &#123;<br>            <span class="hljs-keyword">return</span> file;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (file &amp;&amp; file.<span class="hljs-title function_">indexOf</span>(<span class="hljs-string">&#x27;blob&#x27;</span>) !== -<span class="hljs-number">1</span>) &#123;<br>            <span class="hljs-keyword">return</span> file;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;data:image/jpeg;base64,&#x27;</span> + file;<br>    &#125;<br><br>    <span class="hljs-keyword">var</span> url = <span class="hljs-literal">null</span>;<br>    <span class="hljs-comment">// 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已</span><br>    <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">createObjectURL</span> != <span class="hljs-literal">undefined</span>) &#123; <span class="hljs-comment">// basic</span><br>        url = <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">createObjectURL</span>(file);<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">URL</span> != <span class="hljs-literal">undefined</span>) &#123; <span class="hljs-comment">// mozilla(firefox)</span><br>        url = <span class="hljs-variable language_">window</span>.<span class="hljs-property">URL</span>.<span class="hljs-title function_">createObjectURL</span>(file);<br>    &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">webkitURL</span> != <span class="hljs-literal">undefined</span>) &#123; <span class="hljs-comment">// webkit or chrome</span><br>        url = <span class="hljs-variable language_">window</span>.<span class="hljs-property">webkitURL</span>.<span class="hljs-title function_">createObjectURL</span>(file);<br>    &#125;<br>    <span class="hljs-keyword">return</span> url;<br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">event</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">var</span> _callbacks = &#123;&#125;;<br><br>    <span class="hljs-keyword">var</span> on = <span class="hljs-keyword">function</span> (<span class="hljs-params">eventName, callback</span>) &#123;<br>        <span class="hljs-keyword">if</span> (!_callbacks[eventName]) &#123;<br>            _callbacks[eventName] = [];<br>        &#125;<br><br>        _callbacks[eventName].<span class="hljs-title function_">push</span>(callback);<br>    &#125;;<br><br>    <span class="hljs-keyword">var</span> off = <span class="hljs-keyword">function</span> (<span class="hljs-params">eventName, callback</span>) &#123;<br>        <span class="hljs-keyword">var</span> callbacks = _callbacks[eventName];<br>        <span class="hljs-keyword">if</span> (!callbacks) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">var</span> index = -<span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; callbacks.<span class="hljs-property">length</span>; i++) &#123;<br>            <span class="hljs-keyword">if</span> (callbacks[i] === callback) &#123;<br>                index = i;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span> (index &lt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        _callbacks[eventName].<span class="hljs-title function_">splice</span>(index, <span class="hljs-number">1</span>);<br>    &#125;;<br><br>    <span class="hljs-keyword">var</span> trigger = <span class="hljs-keyword">function</span> (<span class="hljs-params">eventName</span>) &#123;<br>        <span class="hljs-keyword">var</span> callbacks = _callbacks[eventName];<br>        <span class="hljs-keyword">if</span> (!callbacks || !callbacks.<span class="hljs-property">length</span>) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br><br>        <span class="hljs-keyword">var</span> args = <span class="hljs-title class_">Array</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">slice</span>.<span class="hljs-title function_">call</span>(<span class="hljs-variable language_">arguments</span>, <span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; callbacks.<span class="hljs-property">length</span>; i++) &#123;<br>            callbacks[i].<span class="hljs-title function_">apply</span>(<span class="hljs-variable language_">this</span>, args);<br>        &#125;<br>    &#125;;<br><br>    <span class="hljs-keyword">return</span> &#123;<br>        <span class="hljs-attr">on</span>: on,<br>        <span class="hljs-attr">off</span>: off,<br>        <span class="hljs-attr">trigger</span>: trigger<br>    &#125;;<br>&#125;<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;<br>    getGuid,<br>    getObjectURL,<br>    <span class="hljs-attr">event</span>: <span class="hljs-title function_">event</span>(),<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>引入</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> common <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./utils/common&#x27;</span><br><br><span class="hljs-title class_">Vue</span>.<span class="hljs-property"><span class="hljs-keyword">prototype</span></span>.<span class="hljs-property">$common</span> = common;<span class="hljs-comment">//挂一个全局公共方法</span><br></code></pre></td></tr></table></figure>
+
+<p>使用样例：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-comment">//触发事件</span><br><span class="hljs-variable language_">this</span>.<span class="hljs-property">$common</span>.<span class="hljs-property">event</span>.<span class="hljs-title function_">trigger</span>(<span class="hljs-string">&quot;name111&quot;</span>, <span class="hljs-string">&#x27;测试数据&#x27;</span>);<br><br><span class="hljs-comment">//订阅事件</span><br><span class="hljs-variable language_">this</span>.<span class="hljs-property">$common</span>.<span class="hljs-property">event</span>.<span class="hljs-title function_">on</span>(<span class="hljs-string">&quot;事件唯一key&quot;</span>, <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span>&#123;<br>    <span class="hljs-comment">//TODO...</span><br>&#125;)<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="3-学习BootstrapVue开发前端维护页面"><a href="#3-学习BootstrapVue开发前端维护页面" class="headerlink" title="3.学习BootstrapVue开发前端维护页面"></a>3.学习BootstrapVue开发前端维护页面</h2><p>官网学习地址：<br><a href="https://code.z01.com/bootstrap-vue/docs/components/">https://code.z01.com/bootstrap-vue/docs/components/</a></p>
+<p>剩下就是最基础的网页端开发了，利用表格Table，表单Form，还有相关组件就可以开发出基于表单填写的表格维护。其他就不多赘述了，可以直接看项目样例代码，在myvueui文件夹下。</p>
+<p>请求后端的接口的调用案例：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-variable language_">this</span>.<span class="hljs-property">$axios</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&quot;/api/taskScheduler/getAllJsonList&quot;</span>).<span class="hljs-title function_">then</span>(<span class="hljs-function">(<span class="hljs-params">response</span>) =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(response);<br>    <span class="hljs-comment">//TODO...绑定给前端表格</span><br>&#125;).<span class="hljs-title function_">catch</span>(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(err)<br>    <span class="hljs-variable language_">this</span>.$messageError(<span class="hljs-string">&#x27;System Tip&#x27;</span>, err)<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-项目样例代码"><a href="#4-项目样例代码" class="headerlink" title="4.项目样例代码"></a>4.项目样例代码</h2><p><a href="https://github.com/YuMan-LJP/demo/tree/main/AutoPalyApp">https://github.com/YuMan-LJP/demo/tree/main/AutoPalyApp</a></p>
+]]></content>
       <categories>
         <category>研究学习</category>
       </categories>
@@ -927,9 +1031,9 @@
 
 <h3 id="2-2-6-启动测试"><a href="#2-2-6-启动测试" class="headerlink" title="2.2.6.启动测试"></a>2.2.6.启动测试</h3><p>不同角色的用户只能访问指定自身角色的方法：</p>
 <ul>
-<li><a href="mailto:&#x31;&#49;&#x31;&#x40;&#49;&#49;&#x31;&#x2e;&#x71;&#x71;">&#x31;&#49;&#x31;&#x40;&#49;&#49;&#x31;&#x2e;&#x71;&#x71;</a>用户可以访问 <strong>TestNormalUserRole</strong> 方法；</li>
-<li><a href="mailto:&#50;&#x32;&#50;&#64;&#x32;&#x32;&#x32;&#x2e;&#x71;&#113;">&#50;&#x32;&#50;&#64;&#x32;&#x32;&#x32;&#x2e;&#x71;&#113;</a>用户可以访问 <strong>TestAdminRole</strong> 、 <strong>TestMoreAdminRole</strong> 和 <strong>TestMoreAdminRoleV2</strong> 方法；</li>
-<li><a href="mailto:&#51;&#x33;&#51;&#x40;&#x33;&#51;&#51;&#46;&#x71;&#x71;">&#51;&#x33;&#51;&#x40;&#x33;&#51;&#51;&#46;&#x71;&#x71;</a>用户可以访问 <strong>TestSuperAdminRole</strong> 、 <strong>TestMoreAdminRole</strong> 和 <strong>TestMoreAdminRoleV2</strong> 方法。</li>
+<li><a href="mailto:&#49;&#x31;&#49;&#x40;&#49;&#x31;&#49;&#46;&#x71;&#113;">&#49;&#x31;&#49;&#x40;&#49;&#x31;&#49;&#46;&#x71;&#113;</a>用户可以访问 <strong>TestNormalUserRole</strong> 方法；</li>
+<li><a href="mailto:&#x32;&#x32;&#50;&#x40;&#x32;&#x32;&#50;&#x2e;&#x71;&#x71;">&#x32;&#x32;&#50;&#x40;&#x32;&#x32;&#50;&#x2e;&#x71;&#x71;</a>用户可以访问 <strong>TestAdminRole</strong> 、 <strong>TestMoreAdminRole</strong> 和 <strong>TestMoreAdminRoleV2</strong> 方法；</li>
+<li><a href="mailto:&#x33;&#51;&#x33;&#64;&#x33;&#x33;&#51;&#x2e;&#113;&#x71;">&#x33;&#51;&#x33;&#64;&#x33;&#x33;&#51;&#x2e;&#113;&#x71;</a>用户可以访问 <strong>TestSuperAdminRole</strong> 、 <strong>TestMoreAdminRole</strong> 和 <strong>TestMoreAdminRoleV2</strong> 方法。</li>
 </ul>
 <p>访问成功如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_2_6(1).jpg" alt="角色授权访问成功" title="角色授权访问成功"></p>
 <p>访问失败如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_2_6(2).jpg" alt="角色授权访问失败" title="角色授权访问失败"></p>
@@ -984,9 +1088,9 @@
 
 <p>目前实现了不同用户可以访问指定权限的方法，</p>
 <ul>
-<li><a href="mailto:&#x31;&#49;&#x31;&#64;&#x31;&#x31;&#x31;&#46;&#x71;&#x71;">&#x31;&#49;&#x31;&#64;&#x31;&#x31;&#x31;&#46;&#x71;&#x71;</a>用户可以访问 <strong>TestCreate</strong> 、 <strong>TestUpdate</strong> 、 <strong>TestDelete</strong> 方法；</li>
-<li><a href="mailto:&#50;&#x32;&#x32;&#x40;&#50;&#50;&#50;&#46;&#x71;&#113;">&#50;&#x32;&#x32;&#x40;&#50;&#50;&#50;&#46;&#x71;&#113;</a>用户可以访问 <strong>TestApprove</strong> 、 <strong>TestReject</strong> 方法；</li>
-<li><a href="mailto:&#x33;&#51;&#51;&#64;&#x33;&#x33;&#x33;&#46;&#113;&#x71;">&#x33;&#51;&#51;&#64;&#x33;&#x33;&#x33;&#46;&#113;&#x71;</a>用户可以访问全部方法。</li>
+<li><a href="mailto:&#x31;&#x31;&#x31;&#64;&#49;&#x31;&#49;&#x2e;&#x71;&#113;">&#x31;&#x31;&#x31;&#64;&#49;&#x31;&#49;&#x2e;&#x71;&#113;</a>用户可以访问 <strong>TestCreate</strong> 、 <strong>TestUpdate</strong> 、 <strong>TestDelete</strong> 方法；</li>
+<li><a href="mailto:&#50;&#50;&#x32;&#x40;&#x32;&#50;&#50;&#x2e;&#113;&#113;">&#50;&#50;&#x32;&#x40;&#x32;&#50;&#50;&#x2e;&#113;&#113;</a>用户可以访问 <strong>TestApprove</strong> 、 <strong>TestReject</strong> 方法；</li>
+<li><a href="mailto:&#51;&#51;&#51;&#64;&#51;&#x33;&#x33;&#x2e;&#x71;&#x71;">&#51;&#51;&#51;&#64;&#51;&#x33;&#x33;&#x2e;&#x71;&#x71;</a>用户可以访问全部方法。</li>
 </ul>
 <p>在三个权限校验类打个断点，会发现，每次访问方法时，三个权限校验类都会执行一遍，只要其中一个类执行到 <code>context.Succeed</code> 即表示可以访问</p>
 <div class="note note-warning">
@@ -1181,9 +1285,9 @@
 
 <p>完成以上三部启动项目即可查看到效果，三个账户都登录一次，验证一下是否只有对应权限才会显示对应的标签</p>
 <ul>
-<li>作为普通用户角色的<a href="mailto:&#49;&#49;&#x31;&#64;&#49;&#49;&#49;&#x2e;&#113;&#113;">&#49;&#49;&#x31;&#64;&#49;&#49;&#49;&#x2e;&#113;&#113;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(1).jpg" alt="普通用户视图" title="普通用户视图"></li>
-<li>作为管理员角色的<a href="mailto:&#50;&#x32;&#50;&#x40;&#x32;&#50;&#50;&#46;&#x71;&#x71;">&#50;&#x32;&#50;&#x40;&#x32;&#50;&#50;&#46;&#x71;&#x71;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(2).jpg" alt="管理员视图" title="管理员视图"></li>
-<li>作为超级管理员角色的<a href="mailto:&#x33;&#x33;&#51;&#x40;&#x33;&#x33;&#51;&#x2e;&#x71;&#x71;">&#x33;&#x33;&#51;&#x40;&#x33;&#x33;&#51;&#x2e;&#x71;&#x71;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(3).jpg" alt="超级管理员视图" title="超级管理员视图"></li>
+<li>作为普通用户角色的<a href="mailto:&#49;&#49;&#49;&#64;&#x31;&#x31;&#x31;&#x2e;&#113;&#113;">&#49;&#49;&#49;&#64;&#x31;&#x31;&#x31;&#x2e;&#113;&#113;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(1).jpg" alt="普通用户视图" title="普通用户视图"></li>
+<li>作为管理员角色的<a href="mailto:&#x32;&#50;&#x32;&#64;&#x32;&#50;&#x32;&#46;&#113;&#113;">&#x32;&#50;&#x32;&#64;&#x32;&#50;&#x32;&#46;&#113;&#113;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(2).jpg" alt="管理员视图" title="管理员视图"></li>
+<li>作为超级管理员角色的<a href="mailto:&#51;&#x33;&#51;&#64;&#x33;&#x33;&#x33;&#x2e;&#x71;&#113;">&#51;&#x33;&#51;&#64;&#x33;&#x33;&#x33;&#x2e;&#x71;&#113;</a>用户看到的视图如下图所示：<br><img src="/../img/StudyAspNetIdentity/img2_6_3(3).jpg" alt="超级管理员视图" title="超级管理员视图"></li>
 </ul>
 <h3 id="2-6-4-代码优化"><a href="#2-6-4-代码优化" class="headerlink" title="2.6.4.代码优化"></a>2.6.4.代码优化</h3><p>在视图中调用的方法可见，其实和 <a href="#section2_3_2">2.3.2</a> 中控制器方法调用的校验完全一样，都是通过调用IAuthorizationService接口的AuthorizeAsync方法，触发MyViewAuthorizationHandler授权校验类的代码来进行控制。但是这样视图的写法过于复杂，而且会发现MyViewAuthorizationHandler类的写法和MyAuthorizationHandler的写法基本差不多，所以在此基础上可以再进一步封装，具体改造如下：</p>
 <h4 id="2-6-4-1-优化第一步"><a href="#2-6-4-1-优化第一步" class="headerlink" title="2.6.4.1.优化第一步"></a>2.6.4.1.优化第一步</h4><p>重构MyAuthorizationHandler、MyViewAuthorizationHandler和PermissionManager三个类，相同的逻辑封装一个方法，具体代码调整如下：</p>
@@ -1458,7 +1562,7 @@
 <tbody><tr>
 <td>1</td>
 <td>Tom</td>
-<td><a href="mailto:&#116;&#111;&#109;&#64;&#116;&#x6f;&#x6d;&#x2e;&#99;&#111;&#x6d;">&#116;&#111;&#109;&#64;&#116;&#x6f;&#x6d;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#x74;&#111;&#109;&#64;&#116;&#x6f;&#109;&#x2e;&#99;&#x6f;&#109;">&#x74;&#111;&#109;&#64;&#116;&#x6f;&#109;&#x2e;&#99;&#x6f;&#109;</a></td>
 <td>Smith</td>
 <td>Tom</td>
 <td>18</td>
@@ -1469,7 +1573,7 @@
 <tr>
 <td>2</td>
 <td>Jack</td>
-<td><a href="mailto:&#106;&#x61;&#99;&#x6b;&#64;&#106;&#x61;&#x63;&#107;&#x2e;&#x63;&#x6f;&#x6d;">&#106;&#x61;&#99;&#x6b;&#64;&#106;&#x61;&#x63;&#107;&#x2e;&#x63;&#x6f;&#x6d;</a></td>
+<td><a href="mailto:&#106;&#x61;&#x63;&#107;&#64;&#x6a;&#x61;&#x63;&#107;&#46;&#99;&#x6f;&#x6d;">&#106;&#x61;&#x63;&#107;&#64;&#x6a;&#x61;&#x63;&#107;&#46;&#99;&#x6f;&#x6d;</a></td>
 <td>Johnson</td>
 <td>Jack</td>
 <td>18</td>
@@ -1480,7 +1584,7 @@
 <tr>
 <td>3</td>
 <td>Peter</td>
-<td><a href="mailto:&#112;&#101;&#116;&#101;&#114;&#x40;&#112;&#101;&#x74;&#x65;&#114;&#x2e;&#99;&#111;&#x6d;">&#112;&#101;&#116;&#101;&#114;&#x40;&#112;&#101;&#x74;&#x65;&#114;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#112;&#x65;&#x74;&#x65;&#x72;&#64;&#x70;&#101;&#116;&#101;&#114;&#x2e;&#99;&#x6f;&#109;">&#112;&#x65;&#x74;&#x65;&#x72;&#64;&#x70;&#101;&#116;&#101;&#114;&#x2e;&#99;&#x6f;&#109;</a></td>
 <td>Williams</td>
 <td>Peter</td>
 <td>18</td>
@@ -1491,7 +1595,7 @@
 <tr>
 <td>4</td>
 <td>Angela</td>
-<td><a href="mailto:&#97;&#x6e;&#103;&#101;&#108;&#x61;&#x40;&#x61;&#110;&#103;&#x65;&#108;&#x61;&#46;&#99;&#111;&#109;">&#97;&#x6e;&#103;&#101;&#108;&#x61;&#x40;&#x61;&#110;&#103;&#x65;&#108;&#x61;&#46;&#99;&#111;&#109;</a></td>
+<td><a href="mailto:&#x61;&#x6e;&#103;&#101;&#x6c;&#x61;&#x40;&#x61;&#x6e;&#103;&#x65;&#108;&#x61;&#x2e;&#99;&#111;&#x6d;">&#x61;&#x6e;&#103;&#101;&#x6c;&#x61;&#x40;&#x61;&#x6e;&#103;&#x65;&#108;&#x61;&#x2e;&#99;&#111;&#x6d;</a></td>
 <td>Taylor</td>
 <td>Angela</td>
 <td>18</td>
@@ -1518,7 +1622,7 @@
 <tbody><tr>
 <td>11</td>
 <td>Tom</td>
-<td><a href="mailto:&#x74;&#111;&#109;&#x40;&#x74;&#111;&#x6d;&#x2e;&#x63;&#111;&#x6d;">&#x74;&#111;&#109;&#x40;&#x74;&#111;&#x6d;&#x2e;&#x63;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#x74;&#x6f;&#109;&#x40;&#116;&#x6f;&#109;&#46;&#x63;&#x6f;&#x6d;">&#x74;&#x6f;&#109;&#x40;&#116;&#x6f;&#109;&#46;&#x63;&#x6f;&#x6d;</a></td>
 <td>Smith</td>
 <td>Tom</td>
 <td>18</td>
@@ -1529,7 +1633,7 @@
 <tr>
 <td>2</td>
 <td>Jack</td>
-<td><a href="mailto:&#106;&#x61;&#99;&#107;&#64;&#x6a;&#x61;&#x63;&#x6b;&#46;&#x63;&#111;&#109;">&#106;&#x61;&#99;&#107;&#64;&#x6a;&#x61;&#x63;&#x6b;&#46;&#x63;&#111;&#109;</a></td>
+<td><a href="mailto:&#x6a;&#97;&#x63;&#107;&#64;&#106;&#97;&#x63;&#107;&#x2e;&#99;&#x6f;&#x6d;">&#x6a;&#97;&#x63;&#107;&#64;&#106;&#97;&#x63;&#107;&#x2e;&#99;&#x6f;&#x6d;</a></td>
 <td>Johnson</td>
 <td>Jack</td>
 <td>16</td>
@@ -1540,7 +1644,7 @@
 <tr>
 <td>5</td>
 <td>Liz</td>
-<td><a href="mailto:&#x6c;&#x69;&#x7a;&#64;&#x6c;&#105;&#x7a;&#x2e;&#x63;&#111;&#x6d;">&#x6c;&#x69;&#x7a;&#64;&#x6c;&#105;&#x7a;&#x2e;&#x63;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#x6c;&#105;&#x7a;&#x40;&#x6c;&#x69;&#x7a;&#46;&#x63;&#x6f;&#109;">&#x6c;&#105;&#x7a;&#x40;&#x6c;&#x69;&#x7a;&#46;&#x63;&#x6f;&#109;</a></td>
 <td>Williams</td>
 <td>Liz</td>
 <td>18</td>
@@ -1551,7 +1655,7 @@
 <tr>
 <td>6</td>
 <td>Sam</td>
-<td><a href="mailto:&#x73;&#97;&#x6d;&#x40;&#x73;&#x61;&#109;&#x2e;&#99;&#111;&#x6d;">&#x73;&#97;&#x6d;&#x40;&#x73;&#x61;&#109;&#x2e;&#99;&#111;&#x6d;</a></td>
+<td><a href="mailto:&#115;&#97;&#x6d;&#x40;&#115;&#97;&#x6d;&#x2e;&#x63;&#111;&#109;">&#115;&#97;&#x6d;&#x40;&#115;&#97;&#x6d;&#x2e;&#x63;&#111;&#109;</a></td>
 <td>Taylor</td>
 <td>Sam</td>
 <td>18</td>
